@@ -1,0 +1,22 @@
+# .gitignore
+### Django ###
+*.log
+*.pot
+*.pyc
+__pycache__/
+.DS_Store
+.vscode
+*.pid
+*.db
+*.rdb
+*.sqlite3
+local_settings.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
