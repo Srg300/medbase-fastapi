@@ -5,8 +5,11 @@ from pydantic import BaseModel
 class UserBase(BaseModel):
     email: str
 
+    class Config:
+        orm_mode = True
 
-class BasePatient(BaseModel):
+
+class BasePatient(UserBase):
     id: int
 
 
@@ -57,7 +60,7 @@ class Doctor(DoctorBase):
     email: str
     is_staff: bool
 
-    patients: List[BasePatient] = []
+    patients: list[BasePatient] = []
     specialization: BaseSpecialization
 
     class Config:
@@ -93,7 +96,7 @@ class Patient(BaseModel):
         orm_mode = True
 
 
-class PatientCreate(BasePatient):
+class PatientCreate(UserInDB):
     is_staff: bool = False
     is_superuser: bool = False
     patient_name: str
