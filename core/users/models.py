@@ -1,5 +1,5 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
-from sqlalchemy.orm import backref, relationship
+from sqlalchemy.orm import relationship
 
 from database import Base
 
@@ -15,7 +15,7 @@ class User(Base):
     is_superuser = Column(Boolean, default=False)
 
     __mapper_args__ = {
-        'polymorphic_identity':'users',
+        'polymorphic_identity': 'users',
     }
 
 
@@ -30,7 +30,7 @@ class Patient(User):
     doctor = relationship('Doctor', backref='patients', foreign_keys=[doctor_id])
 
     __mapper_args__ = {
-        'polymorphic_identity':'patients',
+        'polymorphic_identity': 'patients',
     }
 
 
@@ -43,9 +43,9 @@ class Doctor(User):
     doctor_phone = Column(String(50), index=True)
     specialization_id = Column(Integer, ForeignKey('specializations.id'))
     specialization = relationship('Specialization', backref='doctors')
-    
+
     __mapper_args__ = {
-        'polymorphic_identity':'doctors',
+        'polymorphic_identity': 'doctors',
     }
 
 
@@ -56,5 +56,5 @@ class Specialization(Base):
     title = Column(String, unique=True, index=True)
 
     __mapper_args__ = {
-        'polymorphic_identity':'specializations',
+        'polymorphic_identity': 'specializations',
     }

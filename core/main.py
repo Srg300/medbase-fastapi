@@ -11,6 +11,7 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
+
 def configure():
     configure_routing()
 
@@ -22,13 +23,8 @@ def configure_routing():
 
 if __name__ == '__main__':
     configure()
-    uvicorn.run(app='main:api', port=8000, host='127.0.0.1', reload=True, debug=True)
+    uvicorn.run(
+        app='main:api', port=8000, host='127.0.0.1', reload=True, debug=True
+        )
 else:
     configure()
-
-
-'''
-
-uvicorn main:app --reload
-
-'''
