@@ -1,8 +1,8 @@
-"""Medbase models new
+"""Models
 
-Revision ID: 1d492c2e85b9
+Revision ID: 174de44ebf70
 Revises: 
-Create Date: 2022-01-28 11:51:30.680463
+Create Date: 2022-01-29 21:55:55.169017
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '1d492c2e85b9'
+revision = '174de44ebf70'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -62,6 +62,8 @@ def upgrade():
     sa.Column('patient_name', sa.String(length=50), nullable=True),
     sa.Column('patient_address', sa.String(length=250), nullable=True),
     sa.Column('patient_phone', sa.String(length=50), nullable=True),
+    sa.Column('doctor_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['doctor_id'], ['doctors.id'], ),
     sa.ForeignKeyConstraint(['id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -75,8 +77,8 @@ def upgrade():
     sa.Column('pill_id', sa.Integer(), nullable=True),
     sa.Column('patient_id', sa.Integer(), nullable=True),
     sa.Column('doctor_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['doctor_id'], ['patient.id'], ),
-    sa.ForeignKeyConstraint(['patient_id'], ['pills.id'], ),
+    sa.ForeignKeyConstraint(['doctor_id'], ['doctors.id'], ),
+    sa.ForeignKeyConstraint(['patient_id'], ['patient.id'], ),
     sa.ForeignKeyConstraint(['pill_id'], ['pills.id'], ),
     sa.PrimaryKeyConstraint('id')
     )

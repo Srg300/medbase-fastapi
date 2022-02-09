@@ -67,6 +67,8 @@ class Patient(BaseModel):
     patient_address: str 
     patient_phone: str
     email: str
+
+    doctor: Doctor
     
     class Config:
         orm_mode = True
@@ -76,6 +78,8 @@ class PatientCreate(UserInDB):
     patient_name: str 
     patient_address: str 
     patient_phone: str
+
+    doctor: Doctor
 
     class Config:
         orm_mode = True

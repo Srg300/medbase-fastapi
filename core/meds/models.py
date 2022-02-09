@@ -13,6 +13,11 @@ class Pill(Base):
     name = Column(String, unique=True, index=True)
     is_active = Column(Boolean, default=True)
 
+    __mapper_args__ = {
+        'polymorphic_identity':'pills',
+    }
+
+
 
 class Recipe(Base):
     __tablename__ = 'recipes'
@@ -21,11 +26,15 @@ class Recipe(Base):
     days = Column(String(250), index=True)
     times = Column(String(100), index=True)
 
-    pill_id = Column(ForeignKey('pills.id'))
-    pill = relationship('Pill', backref='recepies')
+    pill_id = Column(Integer, ForeignKey('pills.id'))
+    pill = relationship('Pill', backref='recepies', )
 
-    patient_id = Column(ForeignKey('pills.id'))
-    patient = relationship('Patient', backref='recepies')
+    patient_id = Column(Integer, ForeignKey('patient.id'))
+    patient = relationship('Patient', backref='recepies', )
 
-    doctor_id = Column(ForeignKey('doctors.id'))
-    doctor = relationship('Doctor', backref='recepies')
+    doctor_id = Column(Integer, ForeignKey('doctors.id'))
+    doctor = relationship('Doctor', backref='recepies', )
+
+    __mapper_args__ = {
+        'polymorphic_identity':'recipes',
+    }

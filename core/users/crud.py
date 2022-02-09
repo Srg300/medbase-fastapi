@@ -40,10 +40,8 @@ def create_doctor(db: Session, doctor: schemas.DcotorCreate):
 def create_patient(db: Session, patient: schemas.PatientCreate):
     fake_hashed_password = patient.password + "1234"
     data = patient.dict()
-    print(data)
     data.pop('password')
     data.update({'hashed_password': fake_hashed_password})
-    print(data)
     db_patient = models.Patient(**data)
     db.add(db_patient)
     db.commit()

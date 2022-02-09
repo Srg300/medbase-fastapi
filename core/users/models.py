@@ -26,6 +26,8 @@ class Patient(User):
     patient_name = Column(String(50), index=True)
     patient_address = Column(String(250), index=True)
     patient_phone = Column(String(50), index=True)
+    doctor_id = Column(Integer, ForeignKey('doctors.id'))
+    doctor = relationship('Doctor', backref='patients')
 
     __mapper_args__ = {
         'polymorphic_identity':'patient',
