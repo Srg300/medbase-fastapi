@@ -5,7 +5,7 @@ from database import Base
 
 
 class User(Base):
-    __tablename__ = 'user'
+    __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String, unique=True, index=True)
@@ -20,24 +20,24 @@ class User(Base):
 
 
 class Patient(User):
-    __tablename__ = 'patient'
+    __tablename__ = 'patients'
 
-    id = Column(Integer, ForeignKey('user.id'), primary_key=True)
+    id = Column(Integer, ForeignKey('users.id'), primary_key=True)
     patient_name = Column(String(50), index=True)
     patient_address = Column(String(250), index=True)
     patient_phone = Column(String(50), index=True)
     doctor_id = Column(Integer, ForeignKey('doctors.id'))
-    doctor = relationship('Doctor', backref='patients')
+    doctor = relationship('Doctor', backref='patients', foreign_keys=[doctor_id])
 
     __mapper_args__ = {
-        'polymorphic_identity':'patient',
+        'polymorphic_identity':'patients',
     }
 
 
 class Doctor(User):
     __tablename__ = 'doctors'
 
-    id = Column(Integer, ForeignKey('user.id'), primary_key=True)
+    id = Column(Integer, ForeignKey('users.id'), primary_key=True)
     doctor_name = Column(String(50), index=True)
     doctor_address = Column(String(250), index=True)
     doctor_phone = Column(String(50), index=True)

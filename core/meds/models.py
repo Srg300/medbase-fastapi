@@ -29,7 +29,7 @@ class Recipe(Base):
     pill_id = Column(Integer, ForeignKey('pills.id'))
     pill = relationship('Pill', backref='recepies', )
 
-    patient_id = Column(Integer, ForeignKey('patient.id'))
+    patient_id = Column(Integer, ForeignKey('patients.id'))
     patient = relationship('Patient', backref='recepies', )
 
     doctor_id = Column(Integer, ForeignKey('doctors.id'))

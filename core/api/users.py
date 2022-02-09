@@ -16,7 +16,7 @@ def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return users
 
 
-@router.get("/users//user/{user_id}", response_model=schemas.User)
+@router.get("/users/user/{user_id}", response_model=schemas.User)
 def read_user(user_id: int, db: Session = Depends(get_db)):
     db_user = crud.get_user(db, user_id=user_id)
     if db_user is None:
@@ -36,6 +36,14 @@ def create_user(user: schemas.UserInDB, db: Session = Depends(get_db)):
 def read_doctors(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     doctors = crud.get_doctors(db, skip=skip, limit=limit)
     return doctors
+
+
+@router.get('/doctors/dotor/{doctor_id}', response_model=schemas.Doctor)
+def read_doctor(doctor_id:int, db: Session = Depends(get_db)):
+    db_doctor = crud.get_doctor(db, doctor_id=doctor_id)
+    if db_doctor is None:
+        raise HTTPException(status_code=404, detail="Doctor not found")
+    return db_doctor
 
 
 @router.post("/doctor/", response_model=schemas.Doctor)
@@ -72,3 +80,13 @@ def create_patient(patient: schemas.PatientCreate, db: Session = Depends(get_db)
     if db_patient:
         raise HTTPException(status_code=400, detail='Patient already exist')
     return crud.create_patient(db=db, patient=patient)
+
+
+@router.delete('/patient', status_code=200)
+def delete_patient(patient_id: int, db: Session = Depends(get_db)):
+    db_patient = crud.get_patient(db, patient_id=patient_id)
+    if not db_patient:
+        raise HTTPException(status_code=400, detail='Patient dost already exist')
+    db.delete(db_patient)
+    db.commit()
+    return {'message': f'{db_patient} was deleted from DB'}

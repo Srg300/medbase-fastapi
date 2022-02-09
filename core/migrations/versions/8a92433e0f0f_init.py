@@ -1,8 +1,8 @@
-"""Models
+"""init
 
-Revision ID: 174de44ebf70
+Revision ID: 8a92433e0f0f
 Revises: 
-Create Date: 2022-01-29 21:55:55.169017
+Create Date: 2022-02-09 16:45:58.282811
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '174de44ebf70'
+revision = '8a92433e0f0f'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -33,7 +33,7 @@ def upgrade():
     )
     op.create_index(op.f('ix_specializations_id'), 'specializations', ['id'], unique=False)
     op.create_index(op.f('ix_specializations_title'), 'specializations', ['title'], unique=True)
-    op.create_table('user',
+    op.create_table('users',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('email', sa.String(), nullable=True),
     sa.Column('hashed_password', sa.String(), nullable=True),
@@ -42,34 +42,34 @@ def upgrade():
     sa.Column('is_superuser', sa.Boolean(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index(op.f('ix_user_email'), 'user', ['email'], unique=True)
-    op.create_index(op.f('ix_user_id'), 'user', ['id'], unique=False)
+    op.create_index(op.f('ix_users_email'), 'users', ['email'], unique=True)
+    op.create_index(op.f('ix_users_id'), 'users', ['id'], unique=False)
     op.create_table('doctors',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('doctor_name', sa.String(length=50), nullable=True),
     sa.Column('doctor_address', sa.String(length=250), nullable=True),
     sa.Column('doctor_phone', sa.String(length=50), nullable=True),
     sa.Column('specialization_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['id'], ['users.id'], ),
     sa.ForeignKeyConstraint(['specialization_id'], ['specializations.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_doctors_doctor_address'), 'doctors', ['doctor_address'], unique=False)
     op.create_index(op.f('ix_doctors_doctor_name'), 'doctors', ['doctor_name'], unique=False)
     op.create_index(op.f('ix_doctors_doctor_phone'), 'doctors', ['doctor_phone'], unique=False)
-    op.create_table('patient',
+    op.create_table('patients',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('patient_name', sa.String(length=50), nullable=True),
     sa.Column('patient_address', sa.String(length=250), nullable=True),
     sa.Column('patient_phone', sa.String(length=50), nullable=True),
     sa.Column('doctor_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['doctor_id'], ['doctors.id'], ),
-    sa.ForeignKeyConstraint(['id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index(op.f('ix_patient_patient_address'), 'patient', ['patient_address'], unique=False)
-    op.create_index(op.f('ix_patient_patient_name'), 'patient', ['patient_name'], unique=False)
-    op.create_index(op.f('ix_patient_patient_phone'), 'patient', ['patient_phone'], unique=False)
+    op.create_index(op.f('ix_patients_patient_address'), 'patients', ['patient_address'], unique=False)
+    op.create_index(op.f('ix_patients_patient_name'), 'patients', ['patient_name'], unique=False)
+    op.create_index(op.f('ix_patients_patient_phone'), 'patients', ['patient_phone'], unique=False)
     op.create_table('recipes',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('days', sa.String(length=250), nullable=True),
@@ -78,7 +78,7 @@ def upgrade():
     sa.Column('patient_id', sa.Integer(), nullable=True),
     sa.Column('doctor_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['doctor_id'], ['doctors.id'], ),
-    sa.ForeignKeyConstraint(['patient_id'], ['patient.id'], ),
+    sa.ForeignKeyConstraint(['patient_id'], ['patients.id'], ),
     sa.ForeignKeyConstraint(['pill_id'], ['pills.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -94,17 +94,17 @@ def downgrade():
     op.drop_index(op.f('ix_recipes_id'), table_name='recipes')
     op.drop_index(op.f('ix_recipes_days'), table_name='recipes')
     op.drop_table('recipes')
-    op.drop_index(op.f('ix_patient_patient_phone'), table_name='patient')
-    op.drop_index(op.f('ix_patient_patient_name'), table_name='patient')
-    op.drop_index(op.f('ix_patient_patient_address'), table_name='patient')
-    op.drop_table('patient')
+    op.drop_index(op.f('ix_patients_patient_phone'), table_name='patients')
+    op.drop_index(op.f('ix_patients_patient_name'), table_name='patients')
+    op.drop_index(op.f('ix_patients_patient_address'), table_name='patients')
+    op.drop_table('patients')
     op.drop_index(op.f('ix_doctors_doctor_phone'), table_name='doctors')
     op.drop_index(op.f('ix_doctors_doctor_name'), table_name='doctors')
     op.drop_index(op.f('ix_doctors_doctor_address'), table_name='doctors')
     op.drop_table('doctors')
-    op.drop_index(op.f('ix_user_id'), table_name='user')
-    op.drop_index(op.f('ix_user_email'), table_name='user')
-    op.drop_table('user')
+    op.drop_index(op.f('ix_users_id'), table_name='users')
+    op.drop_index(op.f('ix_users_email'), table_name='users')
+    op.drop_table('users')
     op.drop_index(op.f('ix_specializations_title'), table_name='specializations')
     op.drop_index(op.f('ix_specializations_id'), table_name='specializations')
     op.drop_table('specializations')

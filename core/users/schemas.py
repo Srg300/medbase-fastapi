@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class UserBase(BaseModel):
@@ -24,7 +24,7 @@ class User(UserBase):
         orm_mode = True
 
 
-class Specialization(BaseModel):
+class BaseSpecialization(BaseModel):
     id: int
     title: str
 
@@ -38,17 +38,29 @@ class SpecializationCreate(BaseModel):
     class Config:
         orm_mode = True
 
+class DoctorBase(BaseModel):
+    id: int
 
-class Doctor(BaseModel):
+    class Config:
+        orm_mode = True
+
+
+class Doctor(DoctorBase):
+    # id: int
     doctor_name:str
     doctor_address: str
     doctor_phone: str
     email: str
     is_staff: bool
     
-    specialization: Specialization
+    # patients: List['Patient'] = []
+    specialization: BaseSpecialization
     class Config:
         orm_mode = True
+
+
+class Specialization(BaseSpecialization):
+    doctors : list[DoctorBase] = []
 
 
 class DcotorCreate(UserInDB):
@@ -56,30 +68,36 @@ class DcotorCreate(UserInDB):
     doctor_address: str
     doctor_phone: str
     is_staff: bool = True
+    is_superuser: bool = False
     specialization_id: int
 
     class Config:
         orm_mode = True
 
+class BasePatient(BaseModel):
+    id: int
+
 
 class Patient(BaseModel):
+    id: int
     patient_name: str 
     patient_address: str 
     patient_phone: str
     email: str
 
-    doctor: Doctor
+    doctor_id: int
     
     class Config:
         orm_mode = True
 
 
-class PatientCreate(UserInDB):
+class PatientCreate(BasePatient):
+    is_staff: bool = False
+    is_superuser: bool = False
     patient_name: str 
     patient_address: str 
     patient_phone: str
-
-    doctor: Doctor
+    doctor_id: int
 
     class Config:
         orm_mode = True
